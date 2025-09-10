@@ -227,6 +227,13 @@ object ujson extends Module{
       def mvnDeps = Seq(mvn"io.circe::circe-parser:$circeVersion")
     }
 
+    object js extends Cross[CirceJsModule](scalaVersions)
+    trait CirceJsModule extends CommonJsModule{
+      def moduleDeps = Seq(ujson.js())
+      val circeVersion = "0.14.14"
+      def mvnDeps = Seq(mvn"io.circe::circe-parser:$circeVersion")
+    }
+
     object native extends Cross[CirceNativeModule](scalaVersions)
     trait CirceNativeModule extends CommonNativeModule{
       def moduleDeps = Seq(ujson.native())
