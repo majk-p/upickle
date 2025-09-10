@@ -424,7 +424,7 @@ object upickle extends Module{
     def moduleDeps = Seq(ujson.native(), upack.native(), implicits.native())
 
     object test extends CommonTestModule{
-      def moduleDeps = super.moduleDeps ++ Seq(core.native().test)
+      def moduleDeps = super.moduleDeps ++ Seq(core.native().test, ujson.circe.native())
       def allSourceFiles = Task{ super.allSourceFiles().filter(_.path.last != "DurationsTests.scala") }
     }
   }
