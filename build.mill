@@ -222,17 +222,17 @@ object ujson extends Module{
   object circe extends Module {
     object jvm extends Cross[CirceJvmModule](scalaVersions)
     trait CirceJvmModule extends CommonJvmModule with CommonCirceModule{
-      override def moduleDeps = this.moduleDeps ++ Seq(ujson.jvm())
+      override def moduleDeps = super.moduleDeps ++ Seq(ujson.jvm())
     }
 
     object js extends Cross[CirceJsModule](scalaVersions)
     trait CirceJsModule extends CommonJsModule with CommonCirceModule{
-      override def moduleDeps = this.moduleDeps ++ Seq(ujson.js())
+      override def moduleDeps = super.moduleDeps ++ Seq(ujson.js())
     }
 
     object native extends Cross[CirceNativeModule](scalaVersions)
     trait CirceNativeModule extends CommonNativeModule with CommonCirceModule{
-      override def moduleDeps = this.moduleDeps ++ Seq(ujson.native())
+      override def moduleDeps = super.moduleDeps ++ Seq(ujson.native())
     }
 
     trait CommonCirceModule extends CommonPublishModule{
