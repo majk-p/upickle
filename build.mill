@@ -237,7 +237,7 @@ object ujson extends Module{
 
     trait CommonCirceModule extends CommonPublishModule{
       val circeVersion = "0.14.14"
-      def mvnDeps = Seq(mvn"io.circe::circe-parser:$circeVersion")
+      def mvnDeps = Seq(mvn"io.circe::circe-parser::$circeVersion")
     }
   }
 
