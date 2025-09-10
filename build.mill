@@ -23,6 +23,8 @@ val scala3NamedTuples = "3.7.0"
 val scalaJSNamedTuples = "1.19.0" // the version of scala.js that the scala3-library is built for.
 val scalaNativeNamedTuples = "0.5.7" // the version of scala.native that the scala3-library is built for.
 val scalaNative = "0.5.8"
+val scalaJs = "1.13.1"
+val scalaJsCirce = "1.19.0" // remove when updating scalaJs to the same version or higher
 val acyclic = "0.3.12"
 
 val sourcecode = "0.4.2"
@@ -80,7 +82,7 @@ trait CommonPublishModule
   def versionScheme: T[Option[VersionScheme]] = Task{ Some(VersionScheme.SemVerSpec) }
 
   def templatesFolders = sourcesFolders.map{src =>
-    val s"src$rest" = src.last
+    val s"src$rest" = src.last: @unchecked
     src / os.up / s"templates$rest"
   }
   def templates = Task.Sources(templatesFolders*)
@@ -123,7 +125,7 @@ trait CommonJvmModule extends CommonPublishModule with CommonPlatformModule{
 }
 
 trait CommonJsModule extends CommonPublishModule with ScalaJSModule with CommonPlatformModule {
-  def scalaJSVersion = "1.13.1"
+  def scalaJSVersion = scalaJs
 
   private def sourceMapOptions = Task.Anon {
     val vcsState = VcsVersion.vcsState()
@@ -227,6 +229,7 @@ object ujson extends Module{
 
     object js extends Cross[CirceJsModule](scalaVersions)
     trait CirceJsModule extends CommonJsModule with CommonCirceModule{
+      override def scalaJSVersion = scalaJsCirce
       override def moduleDeps = super.moduleDeps ++ Seq(ujson.js())
     }
 
@@ -411,7 +414,8 @@ object upickle extends Module{
     def moduleDeps = Seq(ujson.js(), upack.js(), implicits.js())
 
     object test extends CommonTestModule{
-      def moduleDeps = super.moduleDeps ++ Seq(core.js().test)
+      def scalaJSVersion = scalaJsCirce
+      def moduleDeps = super.moduleDeps ++ Seq(core.js().test, ujson.circe.js())
     }
   }
 
@@ -444,7 +448,7 @@ trait BenchModule extends CommonPlatformModule{
 
 object bench extends Module {
   object js extends BenchModule with ScalaJSModule {
-    def scalaJSVersion = "1.13.0"
+    def scalaJSVersion = "1.19.0"
     def moduleDeps = Seq(upickle.js(scala213).test)
   }
 
