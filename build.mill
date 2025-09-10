@@ -393,10 +393,10 @@ object upickle extends Module{
     object test extends CommonTestModule{
       def moduleDeps =
         super.moduleDeps ++
-        Seq(core.jvm().test) ++
+        Seq(core.jvm().test, ujson.circe.jvm()) ++
         (
           if (isDotty) Nil
-          else Seq(ujson.argonaut(), ujson.circe.jvm(), ujson.json4s(), ujson.play())
+          else Seq(ujson.argonaut(), ujson.json4s(), ujson.play())
         )
     }
 
