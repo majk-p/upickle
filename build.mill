@@ -221,22 +221,21 @@ object ujson extends Module{
 
   object circe extends Module {
     object jvm extends Cross[CirceJvmModule](scalaVersions)
-    trait CirceJvmModule extends CommonJvmModule{
+    trait CirceJvmModule extends CommonJvmModule with CommonCirceModule{
       def moduleDeps = Seq(ujson.jvm())
-      val circeVersion = "0.14.14"
-      def mvnDeps = Seq(mvn"io.circe::circe-parser:$circeVersion")
     }
 
     object js extends Cross[CirceJsModule](scalaVersions)
-    trait CirceJsModule extends CommonJsModule{
+    trait CirceJsModule extends CommonJsModule with CommonCirceModule{
       def moduleDeps = Seq(ujson.js())
-      val circeVersion = "0.14.14"
-      def mvnDeps = Seq(mvn"io.circe::circe-parser:$circeVersion")
     }
 
     object native extends Cross[CirceNativeModule](scalaVersions)
-    trait CirceNativeModule extends CommonNativeModule{
+    trait CirceNativeModule extends CommonNativeModule with CommonCirceModule{
       def moduleDeps = Seq(ujson.native())
+    }
+
+    trait CommonCirceModule {
       val circeVersion = "0.14.14"
       def mvnDeps = Seq(mvn"io.circe::circe-parser:$circeVersion")
     }
